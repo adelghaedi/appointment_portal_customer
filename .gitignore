@@ -1,0 +1,30 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Odoo
+*.log
+*.db
+*.sql
+*.zip
+*.egg-info/
+
+# Virtual environment
+venv/
+.env/
+
+# Editor/IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# System
+.DS_Store
+Thumbs.db
+
+# Docker
+*.sock.*
+pid
