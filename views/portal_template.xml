@@ -1,0 +1,14 @@
+<odoo>
+    <template id="portal_my_appointments" name="My Appointments">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <h2>My Appointments</h2>
+                <ul>
+                    <t t-foreach="appointments" t-as="appt">
+                        <li><strong><t t-out="appt.name"/></strong> - <t t-out="appt.date"/></li>
+                    </t>
+                </ul>
+            </div>
+        </t>
+    </template>
+</odoo>
