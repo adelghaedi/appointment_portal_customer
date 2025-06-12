@@ -74,7 +74,7 @@
                             <i class="fa fa-arrow-left me-1"/> Back to Appointments
                         </a>
                         <t t-if="appointment.state == 'draft' and appointment.start_datetime &gt; now">
-                            <form t-attf-action="/appointments/{{ appointment.id }}/cancel" method="post">
+                            <form t-attf-action="/my/appointments/{{ appointment.id }}/cancel" method="post">
                                 <button type="submit" class="btn btn-danger">Cancel</button>
                             </form>
                         </t>
