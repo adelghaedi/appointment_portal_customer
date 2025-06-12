@@ -1,5 +1,7 @@
 from odoo.http import Controller,route,request
-class AppointmentPortalController(Controller): 
+class AppointmentPortalController(Controller):
+
+    
 
     @route('/my/appointments', type='http', auth='user', website=True)
     def portal_my_appointments(self):
