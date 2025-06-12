@@ -1,14 +1,26 @@
 <odoo>
-    <template id="portal_my_appointments" name="My Appointments">
-        <t t-call="portal.portal_layout">
-            <div class="container">
-                <h2>My Appointments</h2>
-                <ul>
-                    <t t-foreach="appointments" t-as="appt">
-                        <li><strong><t t-out="appt.name"/></strong> - <t t-out="appt.date"/></li>
-                    </t>
-                </ul>
-            </div>
-        </t>
+
+    <template
+        id="portal_my_home_appointments"
+        name="Portal My Appointments Snippet"
+        inherit_id="portal.portal_my_home"
+        customize_show="True"
+        priority="31">
+
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_client_category_enable" t-value="True" />
+        </xpath>
+
+        <xpath expr="//div[@id='portal_client_category']" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Appointments</t>
+                <t t-set="url" t-value="'/my/appointments'" />
+                <t t-set="text">Manage your upcoming bookings</t>
+                <t t-set="placeholder_count" t-value="0" />
+                <t t-set="config_card" t-value="True" />
+                <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/appointment.svg'"/>
+            </t>
+        </xpath>
     </template>
+
 </odoo>
