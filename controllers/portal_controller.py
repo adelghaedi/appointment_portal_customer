@@ -36,6 +36,13 @@ class AppointmentPortalController(Controller):
         
         return request.redirect('/my/appointments')
 
+    @route('/my/employees', type='http', auth='user', website=True)
+    def portal_my_employees(self):
+        employees = request.env['hr.employee'].sudo().search([])
+        return request.render("appointment_portal_customer.portal_my_employees", {
+            'employees': employees,
+        })
+
 
 
 

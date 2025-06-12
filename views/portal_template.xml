@@ -23,4 +23,27 @@
         </xpath>
     </template>
 
+    <template
+        id="portal_my_home_employees"
+        name="Portal My Employees Snippet"
+        inherit_id="portal.portal_my_home"
+        customize_show="True"
+        priority="31">
+
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_client_category_enable" t-value="True" />
+        </xpath>
+
+        <xpath expr="//div[@id='portal_client_category']" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Employees</t>
+                <t t-set="url" t-value="'/my/employees'" />
+                <t t-set="text">Sees Employees</t>
+                <t t-set="placeholder_count" t-value="0" />
+                <t t-set="config_card" t-value="True" />
+                <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/appointment.svg'"/>
+            </t>
+        </xpath>
+    </template>
+
 </odoo>
