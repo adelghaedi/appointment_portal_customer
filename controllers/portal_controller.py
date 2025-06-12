@@ -27,4 +27,15 @@ class AppointmentPortalController(Controller):
                 'now':fields.Datetime.now(),
             })
 
+    @route(['/my/appointments/<int:appointment_id>/cancel'],type='http', auth='user',methods=['POST'],csrf=False)
+    def portal_my_appointment_cancel(self,appointment_id):
+        appointment=request.env['appointment.appointment'].sudo().browse(appointment_id)
+
+        if appointment.state=="draft" and appointment.start_datetime>fields.Datetime.now():
+            appointment.write({'state':'cancelled'})
+        
+        return request.redirect('/my/appointments')
+
+
+
 
