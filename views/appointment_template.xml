@@ -1,47 +1,118 @@
 <odoo>
+
     <template id="portal_my_appointments" name="My Appointments">
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
-            <t t-call="portal.portal_searchbar">
+            <t t-call="portal.portal_searchbar"/>
                 <t t-set="title">Appointments</t>
-            </t>
+                <h3>Appointments</h3>
             <t t-if="not appointments">
                 <p class="alert alert-warning">There are currently no appointments for your account.</p>
             </t>
             <t t-if="appointments" t-call="portal.portal_table">
-                <thead>
-                    <tr class="active">
-                        <th>Start Datetime</th>
-                        <th>End Datetime</th>
-                        <th>Duration</th>
-                        <th>Service</th>
-                        <th>Employee</th>
-                        <th>State</th>
-                    </tr>
-                </thead>
-                <t t-foreach="appointments" t-as="appointment">
-                    <tr>
-                        <td>
-                            <span t-field="appointment.start_datetime"/>
-                        </td>
-                        <td>
-                            <span t-field="appointment.end_datetime"/>
-                        </td>
-                        <td>
-                            <span t-field="appointment.duration"/>
-                        </td>
-                        <td>
-                            <span t-field="appointment.service_id.name"/>
-                        </td>
-                        <td>
-                            <span t-field="appointment.employee_id.name"/>
-                        </td>
-                        <td>
-                            <span t-field="appointment.state"/>
-                        </td>
-                    </tr>
-                </t>
+                    <thead>
+                        <tr class="active">
+                            <th>Start Datetime</th>
+                            <th>End Datetime</th>
+                            <th>Duration</th>
+                            <th>Service</th>
+                            <th>Employee</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <t t-foreach="appointments" t-as="appointment">
+                        
+                        <tr class="clickable-row" t-att-data-href="'/my/appointments/%s' % appointment.id">
+                            <td>
+                                <span t-field="appointment.start_datetime"/>
+                            </td>
+                            <td>
+                                <span t-field="appointment.end_datetime"/>
+                            </td>
+                            <td>
+                                <span t-field="appointment.duration"/>
+                            </td>
+                            <td>
+                                <span t-field="appointment.service_id.name"/>
+                            </td>
+                            <td>
+                                <span t-field="appointment.employee_id.name"/>
+                            </td>
+                            <td>
+                                <span t-field="appointment.state"/>
+                            </td>
+                        </tr>
+                    </t>
             </t>
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.querySelectorAll('.clickable-row').forEach(function (row) {
+                        row.addEventListener('click', function () {
+                            const href = this.getAttribute('data-href');
+                            if (href) {
+                                window.location.href = href;
+                            }
+                        });
+                    });
+                });
+            </script>
         </t>
     </template>
+
+
+
+    <template id="portal_my_appointment_detail" name="Appointment Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-set="title">Appointment Detail</t>
+
+            <div class="container mt32 mb32">
+                <h3>Appointment Details</h3>
+                <div class="row mt16 mb-3">
+                    <div class="d-flex gap-2">
+                        <a href="/my/appointments" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left me-1"/> Back to Appointments
+                        </a>
+                        <t t-if="appointment.state == 'draft' and appointment.start_datetime &gt; now">
+                            <form t-attf-action="/appointments/{{ appointment.id }}/cancel" method="post">
+                                <button type="submit" class="btn btn-danger">Cancel</button>
+                            </form>
+                        </t>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Start Datetime</th>
+                            <td><span t-field="appointment.start_datetime"/></td>
+                        </tr>
+                        <tr>
+                            <th>End Datetime</th>
+                            <td><span t-field="appointment.end_datetime"/></td>
+                        </tr>
+                        <tr>
+                            <th>Duration</th>
+                            <td><span t-field="appointment.duration"/></td>
+                        </tr>
+                        <tr>
+                            <th>Service</th>
+                            <td><span t-field="appointment.service_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <th>Employee</th>
+                            <td><span t-field="appointment.employee_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td>
+                                <span t-field="appointment.state"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    
 </odoo>
