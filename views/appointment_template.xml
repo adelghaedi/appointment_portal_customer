@@ -1,0 +1,47 @@
+<odoo>
+    <template id="portal_my_appointments" name="My Appointments">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Appointments</t>
+            </t>
+            <t t-if="not appointments">
+                <p class="alert alert-warning">There are currently no appointments for your account.</p>
+            </t>
+            <t t-if="appointments" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Start Datetime</th>
+                        <th>End Datetime</th>
+                        <th>Duration</th>
+                        <th>Service</th>
+                        <th>Employee</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="appointments" t-as="appointment">
+                    <tr>
+                        <td>
+                            <span t-field="appointment.start_datetime"/>
+                        </td>
+                        <td>
+                            <span t-field="appointment.end_datetime"/>
+                        </td>
+                        <td>
+                            <span t-field="appointment.duration"/>
+                        </td>
+                        <td>
+                            <span t-field="appointment.service_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="appointment.employee_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="appointment.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
