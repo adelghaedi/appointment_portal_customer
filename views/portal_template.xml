@@ -36,12 +36,12 @@
 
         <xpath expr="//div[@id='portal_client_category']" position="inside">
             <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/employee.svg'"/>
                 <t t-set="title">Employees</t>
                 <t t-set="url" t-value="'/my/employees'" />
                 <t t-set="text">Sees Employees</t>
                 <t t-set="placeholder_count" t-value="0" />
                 <t t-set="config_card" t-value="True" />
-                <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/appointment.svg'"/>
             </t>
         </xpath>
     </template>
@@ -64,7 +64,7 @@
                 <t t-set="text">Sees Services</t>
                 <t t-set="placeholder_count" t-value="0" />
                 <t t-set="config_card" t-value="True" />
-                <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/appointment.svg'"/>
+                <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/services.svg'"/>
             </t>
         </xpath>
     </template>
