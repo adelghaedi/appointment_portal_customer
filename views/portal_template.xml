@@ -33,7 +33,7 @@
                 </t>
                 <!-- service -->
                 <t t-call="portal.portal_docs_entry" >
-                    <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/services.svg'"/>
+                    <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/workefield.svg'"/>
                     <t t-set="title">Workfields</t>
                     <t t-set="url" t-value="'/my/workfields'" />
                     <t t-set="text">Sees Workfields</t>
