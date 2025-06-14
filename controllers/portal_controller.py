@@ -46,6 +46,7 @@ class AppointmentPortalController(Controller):
 
         return request.render("appointment_portal_customer.portal_my_employees", {
             'employees': employees,
+            'page_name':'employee_list',
         })
 
     @route('/my/services',type='http', auth='user', website=True)
