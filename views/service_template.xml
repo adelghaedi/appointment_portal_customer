@@ -6,7 +6,7 @@
             <t t-call="portal.portal_searchbar">
                 <t t-set="title">Services</t>
             </t>
-                <h3>Services</h3>
+            <h3>Services</h3>
             <t t-if="services" t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
