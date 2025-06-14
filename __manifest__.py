@@ -14,6 +14,7 @@
         'views/portal_template.xml',
         'views/appointment_template.xml',
         'views/employee_template.xml',
+        'views/service_template.xml',
     ],
     'installable': True,
     'application': False,
