@@ -34,9 +34,9 @@
                 <!-- service -->
                 <t t-call="portal.portal_docs_entry" >
                     <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/services.svg'"/>
-                    <t t-set="title">Services</t>
-                    <t t-set="url" t-value="'/my/services'" />
-                    <t t-set="text">Sees Services</t>
+                    <t t-set="title">Workfields</t>
+                    <t t-set="url" t-value="'/my/workfields'" />
+                    <t t-set="text">Sees Workfields</t>
                     <t t-set="placeholder_count" t-value="0" />
                     <t t-set="config_card" t-value="True" />
                 </t>
