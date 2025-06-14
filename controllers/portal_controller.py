@@ -48,13 +48,25 @@ class AppointmentPortalController(Controller):
             'employees': employees,
             'page_name':'employee_list',
         })
+    
+    @route('/my/workfields',type='http', auth='user', website=True)
+    def portal_my_workfields(self):
+        workfields = request.env['appointment.workfield'].sudo().search([])
 
-    @route('/my/services',type='http', auth='user', website=True)
-    def portal_my_services(self):
-        services = request.env['appointment.service'].sudo().search([])
+        return request.render('appointment_portal_customer.portal_my_workfields',{
+            'workfields': workfields,
+            'page_name': 'workfield_list',
+        })
 
-        return request.render('appointment_portal_customer.portal_my_services',{
+    @route('/my/workfields/<int:workfield_id>/services',type='http', auth='user', website=True)
+    def portal_my_services_of_workfield(self,workfield_id):
+        services = request.env['appointment.service'].sudo().search([
+            ('workfield_id','=',workfield_id)
+        ])
+
+        return request.render('appointment_portal_customer.portal_my_services_of_workfield',{
             'services': services,
+            'page_name': 'service_list',
         })
 
 
