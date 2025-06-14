@@ -38,7 +38,11 @@ class AppointmentPortalController(Controller):
 
     @route('/my/employees', type='http', auth='user', website=True)
     def portal_my_employees(self):
-        employees = request.env['hr.employee'].sudo().search([])
+        services=request.env['appointment.service'].sudo().search([])
+        employees = request.env['hr.employee'].sudo().search([
+            ('service_ids','!=',False)
+        ])
+
         return request.render("appointment_portal_customer.portal_my_employees", {
             'employees': employees,
         })
