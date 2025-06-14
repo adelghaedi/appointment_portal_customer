@@ -1,0 +1,48 @@
+<odoo>
+        <template id="portal_my_services" name="Services">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Services</t>
+            </t>
+                <h3>Services</h3>
+            <t t-if="services" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Workfield</th>
+                    </tr>
+                </thead>
+                <t t-foreach="services" t-as="service">
+                    <tr>
+                        <td>
+                            <span t-field="service.name"/>
+                        </td>
+                        <td>
+                            <span t-field="service.price"/>
+                        </td>
+                        <td>
+                            <t t-if="service.quantity">
+                                <span t-field="service.quantity"/>
+                            </t>
+                            <t t-else="">
+                                <strong>-</strong>
+                            </t>
+                        </td>
+                        <td>
+                            <t t-if="service.workfield_id">
+                                <span t-field="service.workfield_id.name"/>
+                            </t>
+                            <t t-else="">
+                                <strong>-</strong>
+                            </t>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
