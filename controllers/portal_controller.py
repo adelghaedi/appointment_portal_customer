@@ -13,6 +13,7 @@ class AppointmentPortalController(Controller):
         ])
         return request.render("appointment_portal_customer.portal_my_appointments", {
             'appointments': appointments,
+            'page_name':'appointment_list',
         })
 
     @route('/my/appointments/<int:appointment_id>',type='http', auth='user', website=True)
@@ -25,6 +26,7 @@ class AppointmentPortalController(Controller):
             return request.render('appointment_portal_customer.portal_my_appointment_detail',{
                 'appointment':appointment,
                 'now':fields.Datetime.now(),
+                'page_name':'appointment_form',
             })
 
     @route(['/my/appointments/<int:appointment_id>/cancel'],type='http', auth='user',methods=['POST'],csrf=False)

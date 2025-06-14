@@ -1,4 +1,21 @@
 <odoo>
+    <template
+    id="portal_my_appointment_breadcrumbs"
+    name="Portal layout: appointment breadcrumbs"
+    inherit_id="portal.portal_breadcrumbs"
+    priority="20">
+        <xpath expr="//ol[contains(@class,'o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'appointment_list'" class="breadcrumb-item active">
+                Appointments
+            </li>
+            <li t-if="page_name == 'appointment_form'" class="breadcrumb-item">
+                <a t-attf-href="/my/appointments">Appointments</a>
+            </li>
+            <li t-if="page_name == 'appointment_form'" class="breadcrumb-item active">
+                <t t-out="'Appointment Detail'" />
+            </li>
+        </xpath>
+    </template>
 
     <template id="portal_my_appointments" name="My Appointments">
         <t t-call="portal.portal_layout">
@@ -64,6 +81,7 @@
     <template id="portal_my_appointment_detail" name="Appointment Detail">
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar"/>
             <t t-set="title">Appointment Detail</t>
 
             <div class="container mt32 mb32">
