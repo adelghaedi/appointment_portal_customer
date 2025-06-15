@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from odoo import fields
 from odoo.http import Controller,route,request
 
@@ -37,6 +38,60 @@ class AppointmentPortalController(Controller):
             appointment.write({'state':'cancelled'})
         
         return request.redirect('/my/appointments')
+
+    @route(['/my/appointments/new'],type='http', auth='user',website=True)
+    def portal_create_appointment(self):
+        services = request.env['appointment.service'].sudo().search([])
+
+        return request.render('appointment_portal_customer.portal_create_appointment',{
+              'services': services,
+              'page_name': 'appointment_new',   
+            })
+
+    @route('/my/appointments/new/employees_by_service',type='json', auth='user',methods=['POST'])
+    def employees_by_service(self,service_id):
+        employees = request.env['appointment.employee'].sudo().search([
+            ('service_ids','in',int(service_id))
+        ])
+        
+
+        return [
+            {'id': employee.id, 'name': employee.name}
+            for employee in employees
+        ]
+
+
+    @route(['/my/appointments/submit'], type='http', auth='user', website=True, csrf=True)
+    def portal_submit_appointment(self, **post):
+        partner = request.env.user.partner_id
+        try:
+            date_str = post.get('date') 
+            time_str = post.get('time')
+            start_datetime_str = f"{date_str} {time_str}"
+            start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M")
+
+            service = request.env['appointment.service'].sudo().browse(int(post.get('service_id')))
+            duration_minutes = service.duration or 30  
+
+            end_datetime = start_datetime + timedelta(minutes=duration_minutes)
+
+            request.env['appointment.appointment'].sudo().create({
+                'partner_id': partner.id,
+                'service_id': service.id,
+                'employee_id': int(post.get('employee_id')),
+                'start_datetime': start_datetime,
+                'end_datetime': end_datetime,
+                'duration': duration_minutes,
+                'state': 'draft',
+            })
+        except Exception as e:
+            return request.render('appointment_portal_customer.portal_create_appointment', {
+                'services': request.env['appointment.service'].sudo().search([]),
+                'error': str(e),
+            })
+
+        return request.redirect('/my/appointments')
+
 
     @route('/my/employees', type='http', auth='user', website=True)
     def portal_my_employees(self):
