@@ -14,6 +14,12 @@
             <li t-if="page_name == 'appointment_form'" class="breadcrumb-item active">
                 <t t-out="'Appointment Detail'" />
             </li>
+            <li t-if="page_name == 'appointment_new'" class="breadcrumb-item">
+                <a t-attf-href="/my/appointments">Appointments</a>
+            </li>
+            <li t-if="page_name == 'appointment_new'" class="breadcrumb-item active">
+                <t t-out="'New'"/>
+            </li>
         </xpath>
     </template>
 
@@ -22,6 +28,13 @@
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
             <t t-call="portal.portal_searchbar"/>
                 <t t-set="title">Appointments</t>
+            <div class="row mb-3">
+                    <div class="d-flex">
+                        <form t-attf-action="/my/appointments/new">
+                            <button type="submit" class="btn btn-primary">New</button>
+                        </form>
+                    </div>
+            </div>
             <t t-if="not appointments">
                 <p class="alert alert-warning">There are currently no appointments for your account.</p>
             </t>
@@ -126,5 +139,83 @@
         </t>
     </template>
 
+
+    <template id="portal_create_appointment" name="Create Appointment">
+        <t t-call="portal.portal_layout">
+            <t t-set="title">Book Appointment</t>
+            <div class="container">
+                <h3>Book an Appointment</h3>
+                <form action="/my/appointments/submit" method="POST">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <div class="form-group">
+                        <label>Service</label>
+                        <select id="service_select" name="service_id" class="form-control" required="required">
+                            <option value="">-- Select Service --</option>
+                            <t t-foreach="services" t-as="s">
+                                <option t-att-value="s.id"><t t-out="s.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Employee</label>
+                        <select id="employee_select" name="employee_id" class="form-control" required="required">
+                            <option value="">-- Select Employee --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="date" class="form-control" required="required"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" name="time" class="form-control" required="required"/>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mt-3">Book</button>
+                </form>
+            </div>
+        </t>
+
+        <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            const serviceSelect = document.getElementById("service_select");
+            const employeeSelect = document.getElementById("employee_select");
+
+            serviceSelect.addEventListener("change", function () {
+                const serviceId = this.value;
+                employeeSelect.innerHTML = '<option value="">Loading...</option>';
+
+                fetch('/my/appointments/new/employees_by_service', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: JSON.stringify({ service_id: serviceId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    employeeSelect.innerHTML = '<option value="">-- Select Employee --</option>';
+                    data.forEach(employee => {
+                        const option = document.createElement("option");
+                        option.value = employee.id;
+                        option.textContent = employee.name;
+                        employeeSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    employeeSelect.innerHTML = '<option value="">Error loading employees</option>';
+                    console.error("Error:", error);
+                });
+            });
+        });
+        </script>
+    </template>
+
     
+
 </odoo>
