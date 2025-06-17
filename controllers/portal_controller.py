@@ -5,8 +5,6 @@ from odoo.http import Controller,route,request
 
 class AppointmentPortalController(Controller):
 
-    
-
     @route('/my/appointments', type='http', auth='user', website=True)
     def portal_my_appointments(self):
         user_partner = request.env.user.partner_id
@@ -57,16 +55,10 @@ class AppointmentPortalController(Controller):
             ("service_ids","in",[service_id])
         ])
 
-        # employees_dict={}
-        # for employee in employees:
-        #     employees["name"]
-        print([{'id': emp.id, 'name': emp.name} for emp in employees])
-
         return [
             {'id': employee.id, 'name': employee.name}
             for employee in employees
         ]
-
 
     @route(['/my/appointments/submit'], type='http', auth='user', website=True, csrf=True)
     def portal_submit_appointment(self, **post):
