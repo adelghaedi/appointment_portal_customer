@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 from odoo import fields
 from odoo.http import Controller,route,request
@@ -49,11 +50,17 @@ class AppointmentPortalController(Controller):
             })
 
     @route('/my/appointments/new/employees_by_service',type='json', auth='user',methods=['POST'])
-    def employees_by_service(self,service_id):
-        employees = request.env['appointment.employee'].sudo().search([
-            ('service_ids','in',int(service_id))
+    def employees_by_service(self):
+        data = json.loads(request.httprequest.get_data().decode('utf-8'))
+        service_id = data.get('service_id')
+        employees = request.env['hr.employee'].sudo().search([
+            ("service_ids","in",[service_id])
         ])
-        
+
+        # employees_dict={}
+        # for employee in employees:
+        #     employees["name"]
+        print([{'id': emp.id, 'name': emp.name} for emp in employees])
 
         return [
             {'id': employee.id, 'name': employee.name}
