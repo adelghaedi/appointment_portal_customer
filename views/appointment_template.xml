@@ -166,19 +166,75 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Date</label>
-                        <input type="date" name="date" class="form-control" required="required"/>
+                        <label>Start DateTime</label>
+                       <div class="input-group">
+                            <input id="start_datetime" name="start_datetime" class="form-control" required="required"/>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fa fa-calendar fa-lg"></i>
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Time</label>
-                        <input type="time" name="time" class="form-control" required="required"/>
+                        <label>Duration (hours)</label>
+                        <input id="duration" type="number" name="duration" min="1" class="form-control" required="required"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>End DateTime</label>
+                        <input id="end_datetime" type="text" name="end_datetime" class="form-control" readonly="readonly"/>
                     </div>
 
                     <button type="submit" class="btn btn-success mt-3">Book</button>
                 </form>
             </div>
         </t>
+        <!-- Flatpickr CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
+
+        <!-- Flatpickr JS -->
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            flatpickr("#start_datetime", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true
+            });
+        });
+        </script>
+        <script type="text/javascript">
+        function calculateEndDatetime() {
+            const startInput = document.getElementById("start_datetime");
+            const durationInput = document.getElementById("duration");
+            const endInput = document.getElementById("end_datetime");
+    
+            const start = new Date(startInput.value);
+            const duration = parseInt(durationInput.value);
+    
+             if (!isNaN(start.getTime()) &amp; !isNaN(duration)) {
+        const end = new Date(start.getTime() + duration * 60 * 60 * 1000);
+
+        // نمایش به صورت YYYY-MM-DD HH:mm
+        const yyyy = end.getFullYear();
+        const mm = String(end.getMonth() + 1).padStart(2, '0');
+        const dd = String(end.getDate()).padStart(2, '0');
+        const hh = String(end.getHours()).padStart(2, '0');
+        const mi = String(end.getMinutes()).padStart(2, '0');
+
+        const formatted = `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+        endInput.value = formatted;
+         } else {
+        endInput.value = '';
+        }
+        }
+    
+        document.getElementById("start_datetime").addEventListener("change", calculateEndDatetime);
+        document.getElementById("duration").addEventListener("input", calculateEndDatetime);
+        </script>
+
         <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", function () {
             const serviceSelect = document.getElementById("service_select");
