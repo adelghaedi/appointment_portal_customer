@@ -1,7 +1,9 @@
 import json
-from datetime import datetime, timedelta
+import pytz
+from datetime import datetime
 from odoo import fields
 from odoo.http import Controller,route,request
+
 
 class AppointmentPortalController(Controller):
 
@@ -62,25 +64,23 @@ class AppointmentPortalController(Controller):
 
     @route(['/my/appointments/submit'], type='http', auth='user', website=True, csrf=True)
     def portal_submit_appointment(self, **post):
-        partner = request.env.user.partner_id
+        customer = request.env.user.partner_id
         try:
-            date_str = post.get('date') 
-            time_str = post.get('time')
-            start_datetime_str = f"{date_str} {time_str}"
-            start_datetime = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M")
+            start_datetime_str = post.get('start_datetime')
+            duration_str = post.get('duration') 
+            employee_id_str = post.get('employee_id')
+            service_id_str = post.get('service_id')
 
-            service = request.env['appointment.service'].sudo().browse(int(post.get('service_id')))
-            duration_minutes = service.duration or 30  
-
-            end_datetime = start_datetime + timedelta(minutes=duration_minutes)
+            start_datetime=fields.Datetime.from_string(start_datetime_str)
+            
+            service = request.env['appointment.service'].sudo().browse(int(service_id_str))
 
             request.env['appointment.appointment'].sudo().create({
-                'partner_id': partner.id,
+                'customer_id': customer.id,
                 'service_id': service.id,
-                'employee_id': int(post.get('employee_id')),
+                'employee_id': int(employee_id_str),
                 'start_datetime': start_datetime,
-                'end_datetime': end_datetime,
-                'duration': duration_minutes,
+                'duration': float(duration_str),
                 'state': 'draft',
             })
         except Exception as e:
