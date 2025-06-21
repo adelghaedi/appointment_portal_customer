@@ -145,6 +145,13 @@
             <t t-set="title">Book Appointment</t>
             <div class="container">
                 <h3>Book an Appointment</h3>
+
+                <t t-if="error">
+                    <div class="alert alert-danger" role="alert" style="margin-bottom: 1rem;">
+                        <t t-esc="error"/>
+                    </div>
+                </t>
+
                 <form action="/my/appointments/submit" method="POST">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
