@@ -61,6 +61,14 @@ class AppointmentPortalController(Controller):
             {'id': employee.id, 'name': employee.name}
             for employee in employees
         ]
+    
+    def user_tz_to_utc(self, env, dt_local):
+        if dt_local is None:
+            return None
+        user_tz = pytz.timezone(env.user.tz or 'UTC')
+        local_dt = user_tz.localize(dt_local, is_dst=None)
+        utc_dt = local_dt.astimezone(pytz.UTC)
+        return utc_dt
 
     @route(['/my/appointments/submit'], type='http', auth='user', website=True, csrf=True)
     def portal_submit_appointment(self, **post):
@@ -71,7 +79,11 @@ class AppointmentPortalController(Controller):
             employee_id_str = post.get('employee_id')
             service_id_str = post.get('service_id')
 
-            start_datetime=fields.Datetime.from_string(start_datetime_str)
+            naive_dt = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M")
+            start_datetime_utc = self.user_tz_to_utc(request.env, naive_dt)
+            start_datetime_str_utc = fields.Datetime.to_string(start_datetime_utc)
+
+            # start_datetime=fields.Datetime.from_string(start_datetime_str)
             
             service = request.env['appointment.service'].sudo().browse(int(service_id_str))
 
@@ -79,7 +91,7 @@ class AppointmentPortalController(Controller):
                 'customer_id': customer.id,
                 'service_id': service.id,
                 'employee_id': int(employee_id_str),
-                'start_datetime': start_datetime,
+                'start_datetime': start_datetime_str_utc,
                 'duration': float(duration_str),
                 'state': 'draft',
             })
