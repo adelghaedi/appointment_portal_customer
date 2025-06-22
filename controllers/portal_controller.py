@@ -75,11 +75,19 @@ class AppointmentPortalController(Controller):
         service = request.env["appointment.service"].sudo().browse(service_id)
         if not service.exists() or service.quantity <= 0:
             raise ValidationError("No available quantity for the selected service.")
+        
+    def _check_start_datetime_by_now(self,start_datetime):
+        now_utc = datetime.now(pytz.utc)
+        print(f"datetime_now: {now_utc}")
+        if start_datetime < now_utc:
+            raise ValidationError("The start datetime cannot be set in the past")
 
 
     @route(['/my/appointments/submit'], type='http', auth='user', website=True, csrf=True)
     def portal_submit_appointment(self, **post):
         customer = request.env.user.partner_id
+        error_message = None
+
         try:
             start_datetime_str = post.get('start_datetime')
             duration_str = post.get('duration') 
@@ -91,6 +99,13 @@ class AppointmentPortalController(Controller):
             naive_dt = datetime.strptime(start_datetime_str, "%Y-%m-%d %H:%M")
             start_datetime_utc = self.user_tz_to_utc(request.env, naive_dt)
             start_datetime_str_utc = fields.Datetime.to_string(start_datetime_utc)
+
+            if start_datetime_utc.tzinfo is None:
+                start_datetime_utc = pytz.utc.localize(start_datetime_utc)
+            print(f"datetime_now: {start_datetime_utc}")
+
+
+            self._check_start_datetime_by_now(start_datetime_utc)
            
             request.env['appointment.appointment'].sudo().create({
                 'customer_id': customer.id,
@@ -100,10 +115,18 @@ class AppointmentPortalController(Controller):
                 'duration': float(duration_str),
                 'state': 'draft',
             })
+
+        except ValidationError as ve:
+            error_message = str(ve)
         except Exception as e:
+            error_message = f"An unexpected error occurred: {e}"
+
+        if error_message:     
             return request.render('appointment_portal_customer.portal_create_appointment', {
                 'services': request.env['appointment.service'].sudo().search([]),
-                'error': str(e),
+                'error': error_message,
+                'default_vals': post,
+                'page_name': 'appointment_new',
             })
 
         return request.redirect('/my/appointments')
