@@ -10,7 +10,6 @@
         'website',
     ],
     'data': [
-        'security/ir.model.access.csv',
         'views/portal_template.xml',
         'views/appointment_template.xml',
         'views/employee_template.xml',
