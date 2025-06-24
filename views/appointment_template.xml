@@ -159,15 +159,19 @@
                         <label>Service</label>
                         <select id="service_select" name="service_id" class="form-control" required="required">
                             <option value="">-- Select Service --</option>
-                            <t t-foreach="services" t-as="s">
-                                <option t-att-value="s.id"><t t-out="s.name"/></option>
+                            <t t-foreach="services" t-as="service">
+                                <option t-att-value="service.id"
+                                    t-att-selected="str(service.id) == str(default_vals.get('service_id', '')) and 'selected' or None">
+                                    <t t-out="service.name"/>
+                                </option>
                             </t>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>Employee</label>
-                        <select id="employee_select" name="employee_id" class="form-control" required="required">
+                        <select id="employee_select" name="employee_id" class="form-control" required="required"
+                        t-att-data-default-employee="default_vals.get('employee_id')">
                             <option value="">-- Select Employee --</option>
                         </select>
                     </div>
@@ -175,7 +179,8 @@
                     <div class="form-group">
                         <label>Start DateTime</label>
                        <div class="input-group">
-                            <input id="start_datetime" name="start_datetime" class="form-control" required="required"/>
+                            <input id="start_datetime" name="start_datetime" class="form-control" required="required"
+                            t-att-value="default_vals.get('start_datetime', '')"/>
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="fa fa-calendar fa-lg"></i>
@@ -186,12 +191,14 @@
 
                     <div class="form-group">
                         <label>Duration (hours)</label>
-                        <input id="duration" type="number" name="duration" min="1" class="form-control" required="required"/>
+                        <input id="duration" type="number" name="duration" min="1" class="form-control" required="required"
+                        t-att-value="default_vals.get('duration', '')"/>
                     </div>
 
                     <div class="form-group">
                         <label>End DateTime</label>
-                        <input id="end_datetime" type="text" name="end_datetime" class="form-control" readonly="readonly"/>
+                        <input id="end_datetime" type="text" name="end_datetime" class="form-control" readonly="readonly"
+                        t-att-value="default_vals.get('end_datetime', '')"/>
                     </div>
 
                     <button type="submit" class="btn btn-success mt-3">Book</button>
@@ -247,8 +254,9 @@
             const serviceSelect = document.getElementById("service_select");
             const employeeSelect = document.getElementById("employee_select");
 
-            serviceSelect.addEventListener("change", function () {
-                const serviceId = this.value;
+            const defaultEmployeeId = employeeSelect.dataset.defaultEmployee;
+
+            function loadEmployees(serviceId) {
                 employeeSelect.innerHTML = '<option value="">Loading...</option>';
 
                 fetch('/my/appointments/new/employees_by_service', {
@@ -264,7 +272,7 @@
                     const employees = data.result;
                     employeeSelect.innerHTML = '<option value="">-- Select Employee --</option>';
 
-                     if (employees.length === 0) {
+                    if (employees.length === 0) {
                         const option = document.createElement("option");
                         option.value = "";
                         option.textContent = "No employees available for this service";
@@ -277,6 +285,12 @@
                         const option = document.createElement("option");
                         option.value = employee.id;
                         option.textContent = employee.name;
+
+                        // انتخاب گزینه قبلی
+                        if (String(employee.id) === defaultEmployeeId) {
+                            option.selected = true;
+                        }
+
                         employeeSelect.appendChild(option);
                     });
                 })
@@ -284,9 +298,22 @@
                     employeeSelect.innerHTML = '<option value="">Error loading employees</option>';
                     console.error("Error:", error);
                 });
+            }
+
+            serviceSelect.addEventListener("change", function () {
+                const serviceId = this.value;
+                loadEmployees(serviceId);
             });
+
+            // 👇👇👇 این خط مهمه برای بارگذاری اولیه اگر سرویس قبلاً انتخاب شده
+            if (serviceSelect.value) {
+                loadEmployees(serviceSelect.value);
+            }
         });
         </script>
+
+
+        
 
     </template>
 

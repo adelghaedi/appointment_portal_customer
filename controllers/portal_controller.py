@@ -45,8 +45,17 @@ class AppointmentPortalController(Controller):
     def portal_create_appointment(self):
         services = request.env['appointment.service'].sudo().search([])
 
+        default_vals = {
+        'start_datetime': '',
+        'duration': '',
+        'employee_id': '',
+        'service_id': '',
+        'end_datetime': '',
+        }
+
         return request.render('appointment_portal_customer.portal_create_appointment',{
               'services': services,
+              'default_vals': default_vals,
               'page_name': 'appointment_new',   
             })
 
@@ -78,7 +87,6 @@ class AppointmentPortalController(Controller):
         
     def _check_start_datetime_by_now(self,start_datetime):
         now_utc = datetime.now(pytz.utc)
-        print(f"datetime_now: {now_utc}")
         if start_datetime < now_utc:
             raise ValidationError("The start datetime cannot be set in the past")
 
@@ -102,8 +110,6 @@ class AppointmentPortalController(Controller):
 
             if start_datetime_utc.tzinfo is None:
                 start_datetime_utc = pytz.utc.localize(start_datetime_utc)
-            print(f"datetime_now: {start_datetime_utc}")
-
 
             self._check_start_datetime_by_now(start_datetime_utc)
            
