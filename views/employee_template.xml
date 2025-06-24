@@ -17,41 +17,46 @@
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
             <t t-call="portal.portal_searchbar"/>
             <t t-set="title">Employees</t>
-            <t t-if="employees" t-call="portal.portal_table">
-                <thead>
-                    <tr class="active">
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Workfield</th>
-                        <th>Services</th>
-                    </tr>
-                </thead>
-                <t t-foreach="employees" t-as="employee">
-                    <tr>
-                        <td>
-                            <span t-field="employee.name"/>
-                        </td>
-                        <td>
-                            <span t-field="employee.work_email"/>
-                        </td>
-                        <td>
-                            <t t-if="employee.workfield_id">
-                                <span t-field="employee.workfield_id.name"/>
-                            </t>
-                            <t t-else="">
-                                <strong>-</strong>
-                            </t>
-                        </td>
-                        <td>
-                            <t t-if="employee.service_ids">
-                                <span t-field="employee.service_ids"/>
-                            </t>
-                            <t t-else="">
-                                <strong>-</strong>
-                            </t>
-                        </td>
-                    </tr>
-                </t>
+            <h3>Employees</h3>
+            <t t-if="employees">
+                <div class="mb-5">
+                    <t t-call="portal.portal_table">
+                        <thead>
+                            <tr class="active">
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Workfield</th>
+                                <th>Services</th>
+                            </tr>
+                        </thead>
+                        <t t-foreach="employees" t-as="employee">
+                            <tr>
+                                <td>
+                                    <span t-field="employee.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="employee.work_email"/>
+                                </td>
+                                <td>
+                                    <t t-if="employee.workfield_id">
+                                        <span t-field="employee.workfield_id.name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <strong>-</strong>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="employee.service_ids">
+                                        <span t-field="employee.service_ids"/>
+                                    </t>
+                                    <t t-else="">
+                                        <strong>-</strong>
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </div>
             </t>
         </t>
     </template>
