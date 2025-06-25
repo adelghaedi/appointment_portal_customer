@@ -3,6 +3,8 @@
     'version': '17.0.1.0.0',
     'category': 'Portal',
     'summary': 'Customer portal',
+    'author': 'adelghaedi',
+    'website': 'https://github.com/adelghaedi',
     'depends': [
         'base',
         'appointment_module',
