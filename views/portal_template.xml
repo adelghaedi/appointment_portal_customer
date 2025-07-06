@@ -1,12 +1,7 @@
 <odoo>
 
-    <template
-        id="portal_my_home_appointments"
-        name="Portal My Appointments Snippet"
-        inherit_id="portal.portal_my_home"
-        customize_show="True"
-        priority="30">
-        
+    <template id="portal_my_home_appointments" name="Portal My Appointments Snippet" inherit_id="portal.portal_my_home" customize_show="True" priority="30">
+
         <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
             <t t-set="portal_client_category_enable" t-value="True" />
         </xpath>
@@ -14,7 +9,7 @@
         <div id="portal_client_category" position="inside">
             <div id="exchange_portal_category" class="o_portal_category row g-3">
                 <!-- appointment -->
-                <t t-call="portal.portal_docs_entry" >
+                <t t-call="portal.portal_docs_entry">
                     <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/appointment.svg'"/>
                     <t t-set="title">My Appointments</t>
                     <t t-set="url" t-value="'/my/appointments'" />
@@ -23,7 +18,7 @@
                     <t t-set="config_card" t-value="True" />
                 </t>
                 <!-- employee -->
-                <t t-call="portal.portal_docs_entry" >
+                <t t-call="portal.portal_docs_entry">
                     <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/employee.svg'"/>
                     <t t-set="title">Employees</t>
                     <t t-set="url" t-value="'/my/employees'" />
@@ -32,7 +27,7 @@
                     <t t-set="config_card" t-value="True" />
                 </t>
                 <!-- service -->
-                <t t-call="portal.portal_docs_entry" >
+                <t t-call="portal.portal_docs_entry">
                     <t t-set="icon" t-value="'/appointment_portal_customer/static/src/img/workefield.svg'"/>
                     <t t-set="title">Workfields</t>
                     <t t-set="url" t-value="'/my/workfields'" />
@@ -45,6 +40,6 @@
         </div>
     </template>
 
-    
-    
+
+
 </odoo>
