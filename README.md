@@ -30,3 +30,7 @@ This is a custom Odoo 17 module that provides a customer-facing portal for appoi
 3. Update the Odoo apps list:
    - In Odoo, navigate to **Apps** and click **Update Apps List**.
 4. Search for `appointment_portal_customer` and install the module.
+
+## 📄 License
+
+This project is licensed under the MIT License – see the LICENSE section below for details.
